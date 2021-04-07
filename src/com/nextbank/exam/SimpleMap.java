@@ -13,6 +13,14 @@ public class SimpleMap implements Map{
             this.key = key;
             this.value = value;
         }
+
+        @Override
+        public String toString() {
+            return "KeyValue{" +
+                    "key='" + key + '\'' +
+                    ", value=" + value +
+                    '}';
+        }
     }
 
     private final Set<KeyValue> keysValues = new HashSet<>();
@@ -41,6 +49,11 @@ public class SimpleMap implements Map{
                 .filter(kv -> kv.key.equals(key))
                 .map(kv -> kv.value)
                 .findFirst().orElse(null);
+    }
+
+    @Override
+    public void printMap(){
+        keysValues.forEach(kv -> System.out.println(kv.toString()));
     }
 }
 
