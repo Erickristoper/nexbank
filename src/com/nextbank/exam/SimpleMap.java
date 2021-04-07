@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class SimpleMap implements Map{
 
-    private class KeyValue {
+    private static class KeyValue {
         String key;
         Object value;
 
@@ -16,11 +16,27 @@ public class SimpleMap implements Map{
         }
     }
 
-    private Set<KeyValue> keysValues = new HashSet<>();
+    private final Set<KeyValue> keysValues = new HashSet<>();
 
     @Override
     public void put(String key, Object value) {
-       keysValues.add(new KeyValue(key, value));
+        boolean isUniqueNotNull = true;
+
+        if (key == null ) {
+            System.out.println("NULL NOT ALLOWED!");
+            isUniqueNotNull = false;
+        }
+        Iterator<KeyValue> iterator = keysValues.iterator();
+
+        while (iterator.hasNext()) {
+            KeyValue kv = iterator.next();
+            if(kv.key.equals(key)) {
+                System.out.println("DUPLICATE KEY: " + key + " FOUND!");
+                isUniqueNotNull = false;
+                break;
+            }
+        }
+       if(isUniqueNotNull) keysValues.add(new KeyValue(key, value));
     }
 
     @Override
