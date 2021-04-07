@@ -1,7 +1,6 @@
 package com.nextbank.exam;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class SimpleMap implements Map{
@@ -20,33 +19,28 @@ public class SimpleMap implements Map{
 
     @Override
     public void put(String key, Object value) {
-        boolean isUniqueNotNull = true;
+        if (isUniqueNotNull(key)) keysValues.add(new KeyValue(key, value));
+    }
 
-        if (key == null ) {
-            System.out.println("NULL NOT ALLOWED!");
-            isUniqueNotNull = false;
+    private boolean isUniqueNotNull(String key) {
+        if (key == null || key.equals("") ) {
+            System.out.println("NULL OR EMPTY NOT ALLOWED!");
+            return false;
         }
-        Iterator<KeyValue> iterator = keysValues.iterator();
 
-        while (iterator.hasNext()) {
-            KeyValue kv = iterator.next();
-            if(kv.key.equals(key)) {
-                System.out.println("DUPLICATE KEY: " + key + " FOUND!");
-                isUniqueNotNull = false;
-                break;
-            }
-        }
-       if(isUniqueNotNull) keysValues.add(new KeyValue(key, value));
+        return keysValues.stream()
+                .filter(kv -> kv.key.equals(key))
+                .peek(k -> System.out.println("DUPLICATE KEY: " + key + " FOUND!"))
+                .count() == 0;
     }
 
     @Override
     public Object get(String key) {
-       Iterator<KeyValue> iterator = keysValues.iterator();
-       while (iterator.hasNext()) {
-           KeyValue kv = iterator.next();
-           if (kv.key.equals(key)) return kv.value;
-       }
-       return null;
+
+        return (Object) keysValues.stream()
+                .filter(kv -> kv.key.equals(key))
+                .map(kv -> kv.value)
+                .findFirst().orElse(null);
     }
 }
 
